@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Apple投屏</string>
+    <string name="tv_device_name">Apple投屏</string>
+    <string name="status_standby">等待投屏中…</string>
+    <string name="status_streaming">正在投屏中</string>
+    <string name="guide_title">投屏使用指南</string>
+    <string name="guide_step1">1. 确保 iPhone 与本设备连接在同一个 Wi-Fi 网络下</string>
+    <string name="guide_step2">2. 从 iPhone 右上角下拉打开「控制中心」</string>
+    <string name="guide_step3">3. 点击「屏幕镜像」图标（双矩形图标）</string>
+    <string name="guide_step4">4. 在设备列表中轻点该设备名称即可立即投屏</string>
+    <string name="guide_step4_format">4. 在设备列表中轻点「%s」即可立即投屏</string>
+    <string name="network_ip_label">设备 IP 地址：</string>
+    <string name="network_port_label">AirPlay 端口：7000</string>
+    <string name="service_notification_title">Apple投屏服务运行中</string>
+    <string name="service_notification_text">随时可通过 iPhone 屏幕镜像投屏到本设备</string>
+    <string name="background_ready_hint">后台投屏已就绪：按「返回键」回到电视主页，收到手机投屏后将自动打开画面。</string>
+    <string name="background_permission_title">开启后台自动投屏</string>
+    <string name="background_permission_hint">请允许本应用「显示在其他应用上层」，用于收到手机投屏时自动打开画面。未授权时，需手动打开本应用才能显示。</string>
+    <string name="background_permission_open">去授权</string>
+    <string name="background_permission_later">先退到后台</string>
+    <string name="background_permission_unavailable">当前电视未提供该授权入口，请在系统设置中查找「特殊应用权限／显示在其他应用上层」。未授权时需手动打开本应用显示投屏。</string>
+</resources>

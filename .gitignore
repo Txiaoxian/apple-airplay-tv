@@ -1,0 +1,39 @@
+# Built application files (APK建议通过 GitHub Releases 托管发布)
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Files for the ART/Dalvik VM
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+out/
+
+# Gradle build cache & outputs
+.gradle/
+build/
+app/build/
+
+# Local configuration file (SDK 本地路径，防止泄露个人电脑目录)
+local.properties
+
+# Log Files
+*.log
+
+# Android Studio & IntelliJ IDEA
+*.iml
+.idea/
+.navigation/
+captures/
+
+# macOS
+.DS_Store
+
+# 临时参考工程
+cleanyourtv/
