@@ -29,6 +29,11 @@
 ## 详细安装指南
 请阅读 [INSTALL_GUIDE.md](INSTALL_GUIDE.md) 获取 U 盘安装、遥控器使用与局域网路由器网络排查说明。
 
-## 协议与第三方声明
-- FairPlay 算法及查找表的来源与许可见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
-- 本项目仅供技术交流与家庭大屏投屏体验优化使用。
+## 开源协议 (License)
+本项目基于 [MIT License](LICENSE) 开源。
+
+引用及复用的第三方库版权与声明：
+- ALAC 解码核心（BSD 许可证）
+- FairPlay 密钥算法与查找表（MIT 许可证）
+
+详细来源与第三方声明参见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。本项目仅供技术交流与家庭大屏投屏体验优化使用。
