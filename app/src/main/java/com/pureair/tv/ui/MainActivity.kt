@@ -50,6 +50,11 @@ class MainActivity : AppCompatActivity(), TextureView.SurfaceTextureListener {
     private var videoSurface: Surface? = null
     private var videoTexture: SurfaceTexture? = null
 
+    // 记录是否处于前台显示状态，以及本次投屏会话是否由后台唤起
+    private var isActivityVisible = false
+    private var launchedFromBackground = false
+    private var hasBeenStreaming = false
+
     private val serviceConnection = object : ServiceConnection {
         /** 服务可能早已开始投屏，绑定后立即订阅当前状态并恢复窗口。 */
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
@@ -62,8 +67,23 @@ class MainActivity : AppCompatActivity(), TextureView.SurfaceTextureListener {
             streamingJob?.cancel()
             streamingJob = lifecycleScope.launch {
                 binder.service.mediaEngine.streaming.collectLatest { streaming ->
-                    binding.standbyContainer.visibility = if (streaming) View.GONE else View.VISIBLE
-                    binding.tvStatus.setText(if (streaming) R.string.status_streaming else R.string.status_standby)
+                    if (streaming) {
+                        hasBeenStreaming = true
+                        binding.standbyContainer.visibility = View.GONE
+                        binding.tvStatus.setText(R.string.status_streaming)
+                    } else {
+                        // 如果本次投屏是由后台运行拉起的，投屏结束后自动退回后台，不展示待机页面（无感体验）
+                        if (hasBeenStreaming && launchedFromBackground) {
+                            Log.i(TAG, "投屏结束：本次会话由后台唤醒，自动返回后台以实现无感运行")
+                            hasBeenStreaming = false
+                            launchedFromBackground = false
+                            returnToBackground()
+                        } else {
+                            hasBeenStreaming = false
+                            binding.standbyContainer.visibility = View.VISIBLE
+                            binding.tvStatus.setText(R.string.status_standby)
+                        }
+                    }
                 }
             }
             videoSizeJob?.cancel()
@@ -79,8 +99,10 @@ class MainActivity : AppCompatActivity(), TextureView.SurfaceTextureListener {
         override fun onServiceDisconnected(name: ComponentName?) {
             streamingJob?.cancel()
             videoSizeJob?.cancel()
-            binding.standbyContainer.visibility = View.VISIBLE
-            binding.tvStatus.setText(R.string.status_standby)
+            if (!launchedFromBackground) {
+                binding.standbyContainer.visibility = View.VISIBLE
+                binding.tvStatus.setText(R.string.status_standby)
+            }
             videoSize = null
             updateVideoLayout()
             airPlayService = null
@@ -97,16 +119,46 @@ class MainActivity : AppCompatActivity(), TextureView.SurfaceTextureListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (intent?.getBooleanExtra(AirPlayService.EXTRA_WAKE_FROM_BACKGROUND, false) == true) {
+            launchedFromBackground = true
+            Log.i(TAG, "onCreate: 由后台投屏服务创建唤醒 (launchedFromBackground=true)")
+        }
+
         initView()
         setupSurface()
         startAndBindService()
         observeLogs()
     }
 
-    /** 从系统授权页返回时重新读取权限并刷新界面提示。 */
+    /** 处理 singleTop 模式下由后台服务重新拉起投屏的唤醒请求。 */
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        val fromBackgroundExtra = intent?.getBooleanExtra(AirPlayService.EXTRA_WAKE_FROM_BACKGROUND, false) == true
+        if (!isActivityVisible || fromBackgroundExtra) {
+            launchedFromBackground = true
+            Log.i(TAG, "onNewIntent: 标记本次会话为后台唤醒 (isActivityVisible=$isActivityVisible, fromExtra=$fromBackgroundExtra)")
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        isActivityVisible = true
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isActivityVisible = false
+    }
+
+    /** 从系统授权页或后台返回时重新读取权限并刷新界面提示。 */
     override fun onResume() {
         super.onResume()
         updatePermissionStatus()
+        val streaming = airPlayService?.mediaEngine?.isStreaming == true
+        if (!streaming && !launchedFromBackground) {
+            binding.standbyContainer.visibility = View.VISIBLE
+        }
     }
 
     private fun updatePermissionStatus() {
@@ -343,16 +395,41 @@ class MainActivity : AppCompatActivity(), TextureView.SurfaceTextureListener {
     }
 
     /**
+     * 将投屏页面无感退回后台，恢复投屏前的大屏界面（如电视桌面或前一个应用）
+     */
+    private fun returnToBackground() {
+        val moved = moveTaskToBack(true)
+        if (!moved) {
+            try {
+                val homeIntent = Intent(Intent.ACTION_MAIN).apply {
+                    addCategory(Intent.CATEGORY_HOME)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(homeIntent)
+            } catch (e: Exception) {
+                Log.w(TAG, "Failed to navigate to HOME: ${e.message}")
+            }
+        }
+    }
+
+    /**
      * 针对遥控器返回键优化：
-     * 如果正在投屏，返回键停止当前投屏并返回待机；
+     * 如果正在投屏，返回键停止当前投屏；若此前为后台唤起则退回后台，否则返回待机；
      * 待机返回时保留后台服务；缺少自动显示权限时说明限制并让用户选择。
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (binding.standbyContainer.visibility == View.GONE) {
-                // 正在投屏中，按返回键退出全屏投屏，回到待机
-                binding.standbyContainer.visibility = View.VISIBLE
+                // 正在投屏中，按返回键停止投屏
                 airPlayService?.stopStreaming()
+                if (launchedFromBackground) {
+                    Log.i(TAG, "用户按返回键中断后台投屏，直接退回后台")
+                    hasBeenStreaming = false
+                    launchedFromBackground = false
+                    returnToBackground()
+                    return true
+                }
+                binding.standbyContainer.visibility = View.VISIBLE
                 return true
             } else {
                 // 待机状态下按返回键，退到后台不杀进程

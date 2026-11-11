@@ -38,6 +38,7 @@ class AirPlayService : Service(), RtspSessionListener {
         private const val NOTIFICATION_ID = 1001
         private const val WAKE_CHANNEL_ID = "airplay_wake_channel"
         private const val WAKE_NOTIFICATION_ID = 1002
+        const val EXTRA_WAKE_FROM_BACKGROUND = "com.pureair.tv.EXTRA_WAKE_FROM_BACKGROUND"
 
         fun start(context: Context) {
             val intent = Intent(context, AirPlayService::class.java)
@@ -221,10 +222,13 @@ class AirPlayService : Service(), RtspSessionListener {
             // 网络线程排队期间可能已断开，不能再把已结束的投屏页面弹到前台。
             if (streamingSessionId != sessionId || !mediaEngine.isStreaming) return@launch
 
-            val launchIntent = Intent(this@AirPlayService, MainActivity::class.java).addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                    Intent.FLAG_ACTIVITY_SINGLE_TOP
-            )
+            val launchIntent = Intent(this@AirPlayService, MainActivity::class.java).apply {
+                addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP
+                )
+                putExtra(EXTRA_WAKE_FROM_BACKGROUND, true)
+            }
 
             // 通道 1：创建系统级全屏通知（Android 8+ 高优先级渠道强力唤醒推荐机制）
             val fullScreenPendingIntent = PendingIntent.getActivity(

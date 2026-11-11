@@ -56,7 +56,7 @@
                     android:background="#1F6FEB"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="3dp"
-                    android:text="v1.2.2"
+                    android:text="v1.2.3"
                     android:textColor="@color/text_primary"
                     android:textSize="14sp"
                     android:textStyle="bold" />

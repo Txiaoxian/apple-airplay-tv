@@ -64,11 +64,11 @@ gradle assembleDebug --no-daemon --stacktrace
 APK_PATH="$PROJECT_DIR/app/build/outputs/apk/debug/app-debug.apk"
 if [ -f "$APK_PATH" ]; then
     TARGET_APK="$PROJECT_DIR/Apple投屏.apk"
-    TARGET_APK_V="$PROJECT_DIR/Apple投屏-v1.2.2.apk"
+    TARGET_APK_V="$PROJECT_DIR/Apple投屏-v1.2.3.apk"
     cp "$APK_PATH" "$TARGET_APK"
     cp "$APK_PATH" "$TARGET_APK_V"
     echo "=========================================================="
-    echo "🎉 Apple投屏 v1.2.2 APK 编译成功！"
+    echo "🎉 Apple投屏 v1.2.3 APK 编译成功！"
     echo "最终安装包已生成并复制到根目录："
     echo "$TARGET_APK_V"
     echo "文件大小: $(du -h "$TARGET_APK_V" | cut -f1)"
