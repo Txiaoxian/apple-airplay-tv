@@ -3,16 +3,32 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- 1. 奢雅黑曜石深色背景底座 (Squircle 圆角外框) -->
     <path
-        android:fillColor="#161B22"
-        android:pathData="M0,0h108v108h-108z" />
+        android:fillColor="#141416"
+        android:pathData="M26,4h56c12.15,0 22,9.85 22,22v56c0,12.15 -9.85,22 -22,22h-56c-12.15,0 -22,-9.85 -22,-22v-56c0,-12.15 9.85,-22 22,-22z" />
+
+    <!-- 2. 哑光深灰微质感内衬 -->
     <path
-        android:fillColor="#58A6FF"
-        android:pathData="M24,28h60c4.4,0 8,3.6 8,8v36c0,4.4 -3.6,8 -8,8h-60c-4.4,0 -8,-3.6 -8,-8v-36c0,-4.4 3.6,-8 8,-8z" />
+        android:fillColor="#1B1B1F"
+        android:pathData="M26,8h56c9.94,0 18,8.06 18,18v56c0,9.94 -8.06,18 -18,18h-56c-9.94,0 -18,-8.06 -18,-18v-56c0,-9.94 8.06,-18 18,-18z" />
+
+    <!-- 3. 精密钛金银大屏边框 (AirPlay 经典大屏圆角与底部投屏开口) -->
     <path
-        android:fillColor="#0D1117"
-        android:pathData="M28,32h52v30h-52z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#F5F5F7"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M65,65 H76 A6,6 0 0 0 82,59 V35 A6,6 0 0 0 76,29 H32 A6,6 0 0 0 26,35 V59 A6,6 0 0 0 32,65 H43" />
+
+    <!-- 4. 香槟暖金投屏光束 (AirPlay 经典向上投射三角) -->
     <path
-        android:fillColor="#58A6FF"
-        android:pathData="M50,80h8v8h-8z M44,88h20v3h-20z" />
+        android:fillColor="#E5A93C"
+        android:strokeColor="#E5A93C"
+        android:strokeWidth="1.5"
+        android:strokeLineJoin="round"
+        android:pathData="M54,53.5 L64.5,73 H43.5 Z" />
+
 </vector>

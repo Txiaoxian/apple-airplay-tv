@@ -3,19 +3,32 @@
     android:height="180dp"
     android:viewportWidth="320"
     android:viewportHeight="180">
+
+    <!-- 1. 奢雅黑曜石深色背景 -->
     <path
-        android:fillColor="#161B22"
+        android:fillColor="#141416"
         android:pathData="M0,0h320v180h-320z" />
+
+    <!-- 2. 居中内衬卡片 (电视大屏瓷贴风格) -->
     <path
-        android:fillColor="#58A6FF"
-        android:pathData="M110,50h100c5.5,0 10,4.5 10,10v50c0,5.5 -4.5,10 -10,10h-100c-5.5,0 -10,-4.5 -10,-10v-50c0,-5.5 4.5,-10 10,-10z" />
+        android:fillColor="#1B1B1F"
+        android:pathData="M28,14h264c10,0 18,8 18,18v116c0,10 -8,18 -18,18h-264c-10,0 -18,-8 -18,-18v-116c0,-10 8,-18 18,-18z" />
+
+    <!-- 3. 精密钛金银大屏轮廓 -->
     <path
-        android:fillColor="#0D1117"
-        android:pathData="M115,55h90v42h-90z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#F5F5F7"
+        android:strokeWidth="5.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M175,106 H192 A8,8 0 0 0 200,98 V58 A8,8 0 0 0 192,50 H128 A8,8 0 0 0 120,58 V98 A8,8 0 0 0 128,106 H145" />
+
+    <!-- 4. 香槟暖金投射三角光束 -->
     <path
-        android:fillColor="#58A6FF"
-        android:pathData="M150,120h20v10h-20z M140,130h40v4h-40z" />
-    <path
-        android:fillColor="#3FB950"
-        android:pathData="M155,75l10,-10l10,10z" />
+        android:fillColor="#E5A93C"
+        android:strokeColor="#E5A93C"
+        android:strokeWidth="2"
+        android:strokeLineJoin="round"
+        android:pathData="M160,89 L175,116 H145 Z" />
+
 </vector>

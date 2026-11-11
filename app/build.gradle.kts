@@ -11,8 +11,8 @@ android {
         applicationId = "com.pureair.tv"
         minSdk = 24
         targetSdk = 29 // 深度针对 Android 10 (索尼 X91J) 优化，权限与后台服务策略极度友好
-        versionCode = 18
-        versionName = "1.2.3"
+        versionCode = 19
+        versionName = "1.2.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
